@@ -59,8 +59,9 @@ namespace DrxTransfer
         throw;
       }
 
-      DrxTransfer.Log.Console.Info("Загрузка модулей");
       #region Загрузка модулей.
+
+      DrxTransfer.Log.Console.Info("Загрузка модулей");
 
       ClientDevelopmentUpdater.Instance.RefreshDevelopment();
       MetadataService.ConfigurationSettingsPaths = new Sungero.Domain.ClientConfigurationSettingsPaths();
