@@ -25,6 +25,7 @@ namespace DrxTransfer
     /// </summary>
     public static void Initialize()
     {
+      DrxTransfer.Log.Console.Info("Регистрация клиента");
       LocalizationManager.Instance.AssignCurrentCulture();
 
       // Управление кэшами.
@@ -58,6 +59,7 @@ namespace DrxTransfer
         throw;
       }
 
+      DrxTransfer.Log.Console.Info("Загрузка модулей");
       #region Загрузка модулей.
 
       ClientDevelopmentUpdater.Instance.RefreshDevelopment();
