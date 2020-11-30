@@ -25,6 +25,7 @@ namespace DrxTransfer
     /// </summary>
     public static void Initialize()
     {
+      DrxTransfer.Log.Console.Info("Регистрация клиента");
       LocalizationManager.Instance.AssignCurrentCulture();
 
       // Управление кэшами.
@@ -59,6 +60,8 @@ namespace DrxTransfer
       }
 
       #region Загрузка модулей.
+
+      DrxTransfer.Log.Console.Info("Загрузка модулей");
 
       ClientDevelopmentUpdater.Instance.RefreshDevelopment();
       MetadataService.ConfigurationSettingsPaths = new Sungero.Domain.ClientConfigurationSettingsPaths();
