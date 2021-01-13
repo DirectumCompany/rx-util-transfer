@@ -1,8 +1,8 @@
 ﻿using System;
-using Common.Logging;
 using CommonLibrary;
 using CommonLibrary.Dependencies;
 using CommonLibrary.Exceptions;
+using DrxTransfer;
 using Sungero.Core;
 using Sungero.Domain.Client;
 using Sungero.Domain.Client.Deployment;
@@ -10,6 +10,7 @@ using Sungero.Domain.ClientBase;
 using Sungero.Domain.ClientLinqExpressions;
 using Sungero.Domain.Shared;
 using Sungero.Domain.Shared.Cache;
+using Sungero.Logging;
 using Sungero.Metadata.Services;
 using Sungero.Presentation;
 
@@ -18,7 +19,7 @@ namespace DrxTransfer
   public class Client
   {
     // Логгер
-    internal static readonly ILog Log = LogManager.GetLogger<Client>();
+    internal static readonly ILog Log = Logs.GetLogger<Client>();
 
     /// <summary>
     /// Зарегистрировать клиент.
@@ -59,7 +60,7 @@ namespace DrxTransfer
       }
 
       #region Загрузка модулей.
-
+      Log.Info("Загрузка модулей.");
       ClientDevelopmentUpdater.Instance.RefreshDevelopment();
       MetadataService.ConfigurationSettingsPaths = new Sungero.Domain.ClientConfigurationSettingsPaths();
       ClientLazyAssembliesResolver.Instance.LinkToAssembliesFolder(ClientDevelopmentUpdater.Instance.CacheFolder);
@@ -81,7 +82,7 @@ namespace DrxTransfer
       var tenantCulture = TenantInfo.Culture;
       if (!LocalizationManager.Instance.ClientUICulture.Equals(tenantCulture))
       {
-        Log.WarnFormat("Client culture changed to {0}", tenantCulture);
+        Log.Warn(string.Format("Client culture changed to {0}", tenantCulture));
         LocalizationManager.Instance.SetSystemLanguage(tenantCulture.Name);
         LocalizationManager.Instance.AssignCurrentCulture();
         Cleanup();

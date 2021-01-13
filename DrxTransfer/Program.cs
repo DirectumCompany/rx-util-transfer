@@ -1,15 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using CommandLineParser.Exceptions;
 using CommonLibrary;
 using CommonLibrary.Exceptions;
+using CommonLibrary.Logging;
 using ConfigSettings;
+using Sungero.Domain.Client;
+using Sungero.Logging;
 
 namespace DrxTransfer
 {
   class Program
   {
+    private const string LogSettingsFileName = "DrxTransfer.log.config";
+
     private static readonly List<string> showUsageCommands = new List<string> { "--help", "/?", "/help" };
 
     static void Main(string[] args)
@@ -23,6 +29,13 @@ namespace DrxTransfer
           Environment.Exit(0);
 
         ChangeConfig.ConfigSettingsPath = CommandLine.options.ConfigSettingsPath;
+
+        Logs.Сonfiguration
+          .WithLocalizedStringAndPlatformException()
+          .WithUserName()
+          .WithTenant()
+          .Configure(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LogSettingsFileName));
+
         AppConfig.Change();
 
         Client.Initialize();
@@ -35,7 +48,7 @@ namespace DrxTransfer
       catch (Exception ex)
       {
         var platform = ex as PlatformException;
-        Client.Log.Fatal(platform != null ? platform.GetMessageWithDescription() : ex.Message, ex);
+        Client.Log.Fatal(platform != null ? platform.GetMessageWithDescription() : ex.Message);
         Client.Cleanup();
         Environment.Exit(-1);
       }

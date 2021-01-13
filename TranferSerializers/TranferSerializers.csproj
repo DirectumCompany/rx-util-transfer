@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TranferSerializers</RootNamespace>
     <AssemblyName>TranferSerializers</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -38,15 +39,12 @@
       <HintPath>..\packages\NLog.4.6.8\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Sungero.CoreEntities.Shared">
-      <HintPath>..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.CoreEntities.Shared.dll</HintPath>
-    </Reference>
     <Reference Include="Sungero.Domain.Interfaces">
-      <HintPath>..\..\..\..\..\..\..\inetpub\wwwroot\DirectumRxLocal\bin\AppliedModules\Sungero.Domain.Interfaces.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\inetpub\wwwroot\DirectumRxWebLocal\api\bin\AppliedModules\Sungero.Domain.Interfaces.dll</HintPath>
     </Reference>
-    <Reference Include="Sungero.Domain.Shared, Version=0.1.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Domain.Shared.dll</HintPath>
+    <Reference Include="Sungero.Domain.Shared, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Domain.Shared.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -79,13 +77,6 @@
     <Compile Include="RoleSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DrxTransfer\DrxTransfer.csproj">
-      <Project>{ae4c041b-a8fc-419e-98a7-b11e52231a23}</Project>
-      <Name>DrxTransfer</Name>
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="DrxTransfer.log.config" />
     <None Include="packages.config" />
@@ -93,6 +84,13 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DrxTransfer\DrxTransfer.csproj">
+      <Project>{ae4c041b-a8fc-419e-98a7-b11e52231a23}</Project>
+      <Name>DrxTransfer</Name>
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

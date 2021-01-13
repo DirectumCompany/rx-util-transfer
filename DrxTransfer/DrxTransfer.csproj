@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DrxTransfer</RootNamespace>
     <AssemblyName>DrxTransfer</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <PublishUrl>publish\</PublishUrl>
@@ -27,6 +27,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -48,44 +49,141 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BouncyCastle">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\BouncyCastle.dll</HintPath>
+    <Reference Include="BouncyCastle, Version=1.8.5.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\BouncyCastle.dll</HintPath>
     </Reference>
-    <Reference Include="Breadcrumb">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Breadcrumb.dll</HintPath>
+    <Reference Include="Breadcrumb, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Breadcrumb.dll</HintPath>
     </Reference>
-    <Reference Include="CommandLineArgumentsParser">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\CommandLineArgumentsParser.dll</HintPath>
+    <Reference Include="CacheManager.Core, Version=1.2.0.0, Culture=neutral, PublicKeyToken=5b450b4fb65c4cdb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\CacheManager.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Common.Logging">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Common.Logging.dll</HintPath>
+    <Reference Include="CacheManager.SystemRuntimeCaching, Version=1.2.0.0, Culture=neutral, PublicKeyToken=5b450b4fb65c4cdb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\CacheManager.SystemRuntimeCaching.dll</HintPath>
     </Reference>
-    <Reference Include="Common.Logging.Core">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Common.Logging.Core.dll</HintPath>
+    <Reference Include="CommandLineArgumentsParser, Version=3.0.18.0, Culture=neutral, PublicKeyToken=16ad7bf6f4a1666c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\CommandLineArgumentsParser.dll</HintPath>
     </Reference>
-    <Reference Include="Common.Logging.NLog41">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Common.Logging.NLog41.dll</HintPath>
+    <Reference Include="Common.Logging, Version=3.4.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Common.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="CommonLibrary">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\CommonLibrary.dll</HintPath>
+    <Reference Include="Common.Logging.Core, Version=3.4.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Common.Logging.Core.dll</HintPath>
     </Reference>
-    <Reference Include="CommonLibrary.Caching">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\CommonLibrary.Caching.dll</HintPath>
+    <Reference Include="CommonLibrary, Version=0.2.0.0, Culture=neutral, PublicKeyToken=94f059807060c795, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\CommonLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="CommonLibrary.Controls">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\CommonLibrary.Controls.dll</HintPath>
+    <Reference Include="CommonLibrary.Caching, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\CommonLibrary.Caching.dll</HintPath>
     </Reference>
-    <Reference Include="CommonLibrary.Reflection">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\CommonLibrary.Reflection.dll</HintPath>
+    <Reference Include="CommonLibrary.Controls, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\CommonLibrary.Controls.dll</HintPath>
     </Reference>
-    <Reference Include="CommonLibrary.ServiceModel.Client">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\CommonLibrary.ServiceModel.Client.dll</HintPath>
+    <Reference Include="CommonLibrary.Reflection, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\CommonLibrary.Reflection.dll</HintPath>
     </Reference>
-    <Reference Include="ConfigSettings">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\ConfigSettings.dll</HintPath>
+    <Reference Include="CommonLibrary.ServiceModel.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\CommonLibrary.ServiceModel.Client.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Data.v12.2">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\DevExpress.Data.v12.2.dll</HintPath>
+    <Reference Include="ConfigSettings, Version=1.0.0.0, Culture=neutral, PublicKeyToken=94f059807060c795, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\ConfigSettings.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Data.v12.2, Version=12.2.6.0, Culture=neutral, PublicKeyToken=ba55acb187429b82, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\DevExpress.Data.v12.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Printing.v12.2.Core, Version=12.2.6.0, Culture=neutral, PublicKeyToken=ba55acb187429b82, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\DevExpress.Printing.v12.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Core.v12.2, Version=12.2.6.0, Culture=neutral, PublicKeyToken=ba55acb187429b82, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\DevExpress.Xpf.Core.v12.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Docking.v12.2, Version=12.2.6.0, Culture=neutral, PublicKeyToken=ba55acb187429b82, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\DevExpress.Xpf.Docking.v12.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Grid.v12.2, Version=12.2.6.0, Culture=neutral, PublicKeyToken=ba55acb187429b82, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\DevExpress.Xpf.Grid.v12.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Grid.v12.2.Core, Version=12.2.6.0, Culture=neutral, PublicKeyToken=ba55acb187429b82, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\DevExpress.Xpf.Grid.v12.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Layout.v12.2.Core, Version=12.2.6.0, Culture=neutral, PublicKeyToken=ba55acb187429b82, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\DevExpress.Xpf.Layout.v12.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Printing.v12.2, Version=12.2.6.0, Culture=neutral, PublicKeyToken=ba55acb187429b82, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\DevExpress.Xpf.Printing.v12.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Printing.v12.2.Core, Version=12.2.6.0, Culture=neutral, PublicKeyToken=ba55acb187429b82, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\DevExpress.Xpf.Printing.v12.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Themes.Sungero.v12.2">
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\DevExpress.Xpf.Themes.Sungero.v12.2.dll</HintPath>
+    </Reference>
+    <Reference Include="GongSolutions.Wpf.DragDrop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=920bbb82639c64ef, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\GongSolutions.Wpf.DragDrop.dll</HintPath>
+    </Reference>
+    <Reference Include="GostCryptography, Version=2.0.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\GostCryptography.dll</HintPath>
+    </Reference>
+    <Reference Include="GraphX.Controls, Version=2.2.0.0, Culture=neutral, PublicKeyToken=bab23663f80c9e76, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\GraphX.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="GraphX.PCL.Common, Version=2.2.0.0, Culture=neutral, PublicKeyToken=a6cdb671d651b60a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\GraphX.PCL.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Hardcodet.Wpf.TaskbarNotification, Version=1.0.5.0, Culture=neutral, PublicKeyToken=5bffab150b47e11e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.5.0, Culture=neutral, PublicKeyToken=9dea7c6e17aa31ff, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="InterLinq, Version=0.2.4367.30654, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\InterLinq.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common">
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging">
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Microsoft.Practices.EnterpriseLibrary.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Microsoft.WindowsAPICodePack.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
+    </Reference>
+    <Reference Include="NDde">
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\NDde.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -95,100 +193,184 @@
       <HintPath>..\packages\NLog.4.6.8\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Sungero.ClientResources">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.ClientResources.dll</HintPath>
+    <Reference Include="NTwain">
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\NTwain.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp-WPF">
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\PdfSharp-WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="QuickGraph, Version=3.6.61114.0, Culture=neutral, PublicKeyToken=f3fb40175eec2af3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\QuickGraph.dll</HintPath>
+    </Reference>
+    <Reference Include="Remotion.Linq, Version=2.2.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Remotion.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="ReportPortal.Client">
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\ReportPortal.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="SpecUnit">
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\SpecUnit.dll</HintPath>
+    </Reference>
+    <Reference Include="Spring.Aop, Version=2.0.1.45000, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Spring.Aop.dll</HintPath>
+    </Reference>
+    <Reference Include="Spring.Core, Version=2.0.1.45000, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Spring.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sungero.ClientResources, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.ClientResources.dll</HintPath>
+    </Reference>
+    <Reference Include="Sungero.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Common.dll</HintPath>
     </Reference>
     <Reference Include="Sungero.Content.Client">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Content.Client.dll</HintPath>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Content.Client.dll</HintPath>
     </Reference>
     <Reference Include="Sungero.Content.ClientBase">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Content.ClientBase.dll</HintPath>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Content.ClientBase.dll</HintPath>
     </Reference>
     <Reference Include="Sungero.Content.Shared">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Content.Shared.dll</HintPath>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Content.Shared.dll</HintPath>
     </Reference>
     <Reference Include="Sungero.CoreEntities.Client">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.CoreEntities.Client.dll</HintPath>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.CoreEntities.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Sungero.CoreEntities.ClientBase">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.CoreEntities.ClientBase.dll</HintPath>
+    <Reference Include="Sungero.CoreEntities.ClientBase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.CoreEntities.ClientBase.dll</HintPath>
     </Reference>
-    <Reference Include="Sungero.CoreEntities.Shared">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.CoreEntities.Shared.dll</HintPath>
+    <Reference Include="Sungero.CoreEntities.Shared, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.CoreEntities.Shared.dll</HintPath>
     </Reference>
-    <Reference Include="Sungero.Domain.Client">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Domain.Client.dll</HintPath>
+    <Reference Include="Sungero.Cryptography.Plugin, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Cryptography.Plugin.dll</HintPath>
     </Reference>
-    <Reference Include="Sungero.Domain.ClientBase">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Domain.ClientBase.dll</HintPath>
+    <Reference Include="Sungero.Domain.Client, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Domain.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Sungero.Domain.Shared">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Domain.Shared.dll</HintPath>
+    <Reference Include="Sungero.Domain.ClientBase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Domain.ClientBase.dll</HintPath>
     </Reference>
-    <Reference Include="Sungero.Kernel.Test.Utils.Common">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Kernel.Test.Utils.Common.dll</HintPath>
+    <Reference Include="Sungero.Domain.Shared, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Domain.Shared.dll</HintPath>
     </Reference>
-    <Reference Include="Sungero.Metadata">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Metadata.dll</HintPath>
+    <Reference Include="Sungero.Logging, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Sungero.Metadata, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Metadata.dll</HintPath>
     </Reference>
     <Reference Include="Sungero.Plugins, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Plugins.dll</HintPath>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Plugins.dll</HintPath>
     </Reference>
     <Reference Include="Sungero.Plugins.Sdk, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Plugins.Sdk.dll</HintPath>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Plugins.Sdk.dll</HintPath>
     </Reference>
-    <Reference Include="Sungero.Presentation">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Presentation.dll</HintPath>
+    <Reference Include="Sungero.Presentation, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Presentation.dll</HintPath>
     </Reference>
     <Reference Include="Sungero.Presentation.CommonDataBinders">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Presentation.CommonDataBinders.dll</HintPath>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Presentation.CommonDataBinders.dll</HintPath>
     </Reference>
     <Reference Include="Sungero.Reporting.Client">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Reporting.Client.dll</HintPath>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Reporting.Client.dll</HintPath>
     </Reference>
     <Reference Include="Sungero.Reporting.ClientBase">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Reporting.ClientBase.dll</HintPath>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Reporting.ClientBase.dll</HintPath>
     </Reference>
     <Reference Include="Sungero.Reporting.ClientServices">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Reporting.ClientServices.dll</HintPath>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Reporting.ClientServices.dll</HintPath>
     </Reference>
     <Reference Include="Sungero.Reporting.Shared">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Reporting.Shared.dll</HintPath>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Reporting.Shared.dll</HintPath>
     </Reference>
-    <Reference Include="Sungero.Services.Shared">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Services.Shared.dll</HintPath>
+    <Reference Include="Sungero.Services.Shared, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Services.Shared.dll</HintPath>
     </Reference>
-    <Reference Include="Sungero.StorageServices.Shared">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.StorageServices.Shared.dll</HintPath>
+    <Reference Include="Sungero.StorageService.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.StorageService.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Sungero.StorageServices.Shared, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.StorageServices.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="Sungero.Sync1C">
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Sync1C.dll</HintPath>
     </Reference>
     <Reference Include="Sungero.Workflow.Client">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Workflow.Client.dll</HintPath>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Workflow.Client.dll</HintPath>
     </Reference>
     <Reference Include="Sungero.Workflow.ClientBase">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Workflow.ClientBase.dll</HintPath>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Workflow.ClientBase.dll</HintPath>
     </Reference>
     <Reference Include="Sungero.Workflow.Interfaces">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Workflow.Interfaces.dll</HintPath>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Workflow.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="Sungero.Workflow.Shared">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Workflow.Shared.dll</HintPath>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Sungero.Workflow.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="SungeroContentComServer">
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\SungeroContentComServer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Transactions" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Unity.Abstractions, Version=5.11.1.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Unity.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Configuration, Version=5.11.1.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Unity.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Container, Version=5.11.1.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Program Files\Directum Company\Sungero Development Studio\Utilities\DrxUtil\Unity.Container.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client.cs" />
