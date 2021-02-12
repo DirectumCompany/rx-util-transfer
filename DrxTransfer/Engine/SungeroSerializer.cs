@@ -71,7 +71,7 @@ namespace DrxTransfer.Engine
       foreach (var entity in entities)
       {
         Log.Console.Info(string.Format("Обработка записи {0} из {1}. ИД = {2}", index, entitiesCount, entity.Id));
-        result.Add(this.Export(entity));
+        result.Add(new Dictionary<string, object>() { this.Export(entity) });
         index++;
       }
 
