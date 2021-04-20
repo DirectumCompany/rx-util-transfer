@@ -287,6 +287,7 @@ namespace TranferSerializers
             {
                 var stageObject = stage.StageObject as JObject;
                 var stageName = stageObject.Property("Name").Value.ToString();
+                var stageType = Sungero.Core.Enumeration.GetItems(typeof(Sungero.Docflow.ApprovalStage.StageType)).FirstOrDefault(e => e.Value == stageObject.Property("StageType").Value.ToString());
 
                 var stageEntity = Sungero.Docflow.ApprovalStages.Null;
                 stageEntity = Session.Current.GetEntities("Sungero.Docflow.IApprovalStage").Cast<Sungero.Docflow.IApprovalStage>().FirstOrDefault(c => c.Name == stageName) ??
@@ -296,7 +297,7 @@ namespace TranferSerializers
                 {
                     stageEntity = Sungero.Docflow.ApprovalStages.As(Session.Current.CreateEntity(typeof(Sungero.Docflow.IApprovalStage)));
                     stageEntity.Name = stageName;
-
+                    stageEntity.StageType = stageType;
 
                     var stageReworPerformerkType = stageObject.Property("ReworkPerformerType").Value.ToString();
                     if (!string.IsNullOrEmpty(stageReworPerformerkType))
@@ -402,6 +403,7 @@ namespace TranferSerializers
                 var stageItem = rule.Stages.AddNew();
                 stageItem.Stage = stageEntity;
                 stageItem.Number = stage.Number;
+                stageItem.StageType = stageType;
             }
 
             #endregion
