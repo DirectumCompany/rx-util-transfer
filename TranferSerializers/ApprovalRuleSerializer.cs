@@ -105,18 +105,21 @@ namespace TranferSerializers
       if (int.TryParse(entityItem.Property("ReworkDeadline").Value.ToString(), out reworkDeadline))
         rule.ReworkDeadline = reworkDeadline;
 
-      var reworkPerformer = content["ReworkPerformer"];
-      if (reworkPerformer != null && !string.IsNullOrEmpty(reworkPerformer.ToString()))
-        rule.ReworkPerformer = Session.Current.GetEntities("Sungero.Company.IEmployee").Cast<Sungero.Company.IEmployee>()
-            .FirstOrDefault(z => z.Name == reworkPerformer.ToString());
+      object reworkPerformerObject = null;
+      if (!(content.TryGetValue("ReworkPerformer", out reworkPerformerObject) && reworkPerformerObject == null))
+      {
+        var reworkPerformer = reworkPerformerObject.ToString();
+        Log.Console.Info(reworkPerformer);
+        if (!string.IsNullOrEmpty(reworkPerformer))
+          rule.ReworkPerformer = GetRecipient(reworkPerformer, rule.ReworkPerformerType);
+      }
 
-      var reworkApprovalRole = content["ReworkApprovalRole"];
-      if (reworkApprovalRole != null && !string.IsNullOrEmpty(reworkApprovalRole.ToString()))
-        rule.ReworkApprovalRole = Session.Current.GetEntities("Sungero.Docflow.IApprovalRole").Cast<Sungero.Docflow.IApprovalRole>()
-          .FirstOrDefault(z => z.Name == reworkApprovalRole.ToString());
-      Log.Console.Info(reworkPerformer);
-      Log.Console.Info(reworkApprovalRole);
-
+      object reworkApprovalRoleObject = null;
+      if (!(content.TryGetValue("ReworkApprovalRole", out reworkApprovalRoleObject) && reworkApprovalRoleObject == null))
+      {
+        if (!string.IsNullOrEmpty(reworkApprovalRoleObject.ToString()))
+          rule.ReworkApprovalRole = GetApprovalRole(reworkApprovalRoleObject.ToString());
+      }
 
       #endregion
 
@@ -456,7 +459,7 @@ namespace TranferSerializers
       content["DocumentGroup"] = approvalRule.DocumentGroups.Select(g => g.DocumentGroup);
 
       content["ReworkPerformer"] = approvalRule.ReworkPerformer != null ? approvalRule.ReworkPerformer.Name : null;
-      content["ReworkApprovalRole"] = approvalRule.ReworkApprovalRole != null ? approvalRule.ReworkApprovalRole : null;
+      content["ReworkApprovalRole"] = approvalRule.ReworkApprovalRole != null ? approvalRule.ReworkApprovalRole.Name : null;
 
       var stages = new List<Stage>();
       foreach (var stage in approvalRule.Stages)

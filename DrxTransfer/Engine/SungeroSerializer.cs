@@ -4,6 +4,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using Sungero.Domain.Client;
 using Sungero.Domain.Shared;
+using Sungero.Docflow;
 
 namespace DrxTransfer.Engine
 {
@@ -64,7 +65,7 @@ namespace DrxTransfer.Engine
 
       var entitiesCount = entities.Count();
       Log.Console.Info(string.Format("Найдено {0} объектов", entitiesCount));
-            
+
       var result = new List<Dictionary<string, object>>();
 
       var index = 1;
@@ -87,6 +88,26 @@ namespace DrxTransfer.Engine
         Log.Console.Info("Запись результата в файл");
         sw.WriteLine(JSONBody);
       }
+    }
+
+    protected Sungero.CoreEntities.IRecipient GetRecipient(string name, Sungero.Core.Enumeration? recipientType = null)
+    {
+      if (recipientType.Value.Value.Equals(Sungero.Docflow.ApprovalRule.ReworkPerformerType.Author)
+        || recipientType.Value.Value.Equals(Sungero.Docflow.ApprovalStage.ReworkPerformerType.Author)
+        || recipientType.Value.Value.Equals(Sungero.Docflow.ApprovalStage.ReworkPerformerType.FromRule))
+        return null;
+
+      var recipients = Session.Current.GetEntities("Sungero.CoreEntities.IRecipient").Cast<Sungero.CoreEntities.IRecipient>()
+        .Where(z => z.Name == name);
+      if (recipients.Count() > 1)
+        Log.Console.Warn(string.Format("Было найдено несколько записей с именем {0}. Было возращено первое по списку значение. Проверте корренкность.", name));
+
+      return recipients.FirstOrDefault();
+    }
+
+    protected Sungero.Docflow.IApprovalRole GetApprovalRole(string roleName)
+    {
+      return Session.Current.GetEntities("Sungero.Docflow.IApprovalRole").Cast<Sungero.Docflow.IApprovalRole>().FirstOrDefault(z => z.Name == roleName);
     }
   }
 }
