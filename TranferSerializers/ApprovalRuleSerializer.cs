@@ -108,10 +108,8 @@ namespace TranferSerializers
       object reworkPerformerObject = null;
       if (!(content.TryGetValue("ReworkPerformer", out reworkPerformerObject) && reworkPerformerObject == null))
       {
-        var reworkPerformer = reworkPerformerObject.ToString();
-        Log.Console.Info(reworkPerformer);
-        if (!string.IsNullOrEmpty(reworkPerformer))
-          rule.ReworkPerformer = GetRecipient(reworkPerformer, rule.ReworkPerformerType);
+        if (!string.IsNullOrEmpty(reworkPerformerObject.ToString()))
+          rule.ReworkPerformer = GetRecipient(reworkPerformerObject.ToString(), rule.ReworkPerformerType);
       }
 
       object reworkApprovalRoleObject = null;
@@ -321,6 +319,21 @@ namespace TranferSerializers
             stageEntity.ReworkPerformer = Session.Current.GetEntities("Sungero.Company.IEmployee").Cast<Sungero.Company.IEmployee>()
                 .FirstOrDefault(z => z.Name == stageReworkPerformer);
 
+          object stageReworkPerformerObject = null;
+          if (!(content.TryGetValue("ReworkPerformer", out stageReworkPerformerObject) && stageReworkPerformerObject == null))
+          {
+            if (!string.IsNullOrEmpty(stageReworkPerformerObject.ToString()))
+              stageEntity.ReworkPerformer = GetRecipient(stageReworkPerformerObject.ToString(), rule.ReworkPerformerType);
+          }
+
+          object stageReworkApprovalRoleObject = null;
+          if (!(content.TryGetValue("ReworkApprovalRole", out stageReworkApprovalRoleObject) && stageReworkApprovalRoleObject == null))
+          {
+            if (!string.IsNullOrEmpty(stageReworkApprovalRoleObject.ToString()))
+              rule.ReworkApprovalRole = GetApprovalRole(stageReworkApprovalRoleObject.ToString());
+          }
+
+
           var deadlineInDays = stageObject.Property("DeadlineInDays").ToObject<int?>();
           if (deadlineInDays != null)
             stageEntity.DeadlineInDays = deadlineInDays;
@@ -472,7 +485,6 @@ namespace TranferSerializers
           ApprovalRoles = stage.Stage.ApprovalRoles.Select(r => r.ApprovalRole),
           Recipients = stage.Stage.Recipients.Select(r => r.Recipient),
           ReworkPerformer = stage.Stage.ReworkPerformer != null ? stage.Stage.ReworkPerformer.Name : null,
-          ReworkPerformerType = stage.Stage.ReworkPerformerType.ToString(),
           ReworkApprovalRole = stage.Stage.ReworkApprovalRole != null ? stage.Stage.ReworkApprovalRole.Name : null
         });
       content["Stages"] = stages;
