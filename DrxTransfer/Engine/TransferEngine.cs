@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using System.IO;
+using Newtonsoft.Json.Linq;
 
 namespace DrxTransfer.Engine
 {
@@ -37,18 +38,31 @@ namespace DrxTransfer.Engine
       try
       {
         Log.Console.Info("Загрузка сериализатора");
-        var serializer = SerializersRepository.Instance.GetSerializerForEntityType(CommandLine.options.EntityType);
+
+        string jsonText = string.Empty;
+        using (StreamReader sr = new StreamReader(filePath, System.Text.Encoding.Default))
+        {
+          Log.Console.Info("Чтение файла");
+          jsonText = sr.ReadToEnd();
+        }
+        var jsonBody = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(jsonText);
+
+        SungeroSerializer serializer = null;
+        try
+        {
+          var metaRecord = jsonBody.FirstOrDefault(z => z.Keys.Contains(SungeroSerializer.MetaSerializerTag));
+          var entityMeta = metaRecord[SungeroSerializer.MetaSerializerTag] as JObject;
+          serializer = SerializersRepository.Instance.GetSerializerForEntityType(entityMeta["EntityName"].ToString());
+          jsonBody.Remove(metaRecord);
+        }
+        catch (Exception ex)
+        {
+          Log.Console.Error(string.Format("Не удалось получить сериализатор для файла: {0}. \n {1}", filePath, ex.Message));
+          return;
+        }
 
         if (serializer != null)
         {
-          string jsonText = string.Empty;
-          using (StreamReader sr = new StreamReader(filePath, System.Text.Encoding.Default))
-          {
-            Log.Console.Info("Чтение файла");
-            jsonText = sr.ReadToEnd();
-          }
-          var jsonBody = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(jsonText);
-
           Log.Console.Info(string.Format("Сериализатор {0} успешно загружен", CommandLine.options.EntityType));
           var index = 1;
           var jsonItemsCount = jsonBody.Count();
