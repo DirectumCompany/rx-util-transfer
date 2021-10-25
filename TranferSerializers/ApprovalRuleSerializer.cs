@@ -94,6 +94,7 @@ namespace TranferSerializers
 
       rule.IsSmallApprovalAllowed = entityItem.Property("IsSmallApprovalAllowed").ToObject<bool>();
       rule.Priority = entityItem.Property("Priority").ToObject<int>();
+      rule.NeedRestrictInitiatorRights = entityItem.Property("NeedRestrictInitiatorRights").ToObject<bool>();
 
       #endregion
 
@@ -310,6 +311,10 @@ namespace TranferSerializers
           stageEntity.IsConfirmSigning = stageObject.Property("IsConfirmSigning").ToObject<bool?>();
           stageEntity.IsResultSubmission = stageObject.Property("IsResultSubmission").ToObject<bool?>();
           stageEntity.Note = stageObject.Property("Note").ToObject<string>();
+          stageEntity.NeedRestrictPerformerRights = stageObject.Property("NeedRestrictPerformerRights").ToObject<bool>();
+          var rightType = stageObject.Property("ReworkType").Value.ToString();
+          if (!string.IsNullOrEmpty(rightType))
+            stageEntity.RightType = Sungero.Core.Enumeration.GetItems(typeof(Sungero.Docflow.ApprovalStage.RightType)).FirstOrDefault(e => e.Value == rightType);
 
           var assigneeType = stageObject.Property("AssigneeType").Value.ToString();
           if (!string.IsNullOrEmpty(assigneeType))

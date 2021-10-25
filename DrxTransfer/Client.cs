@@ -30,7 +30,7 @@ namespace DrxTransfer
       LocalizationManager.Instance.AssignCurrentCulture();
 
       // Управление кэшами.
-      var cacheConfigProvider = new CacheConfigProvider(null);
+      var cacheConfigProvider = new CacheConfigProvider(null, false);
       Dependency.RegisterInstance<ICacheManager>(new CacheManagerImplementation(cacheConfigProvider));
 
       // Плагины.
