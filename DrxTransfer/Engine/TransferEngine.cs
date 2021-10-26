@@ -36,19 +36,20 @@ namespace DrxTransfer.Engine
     {
       try
       {
+        string jsonText = string.Empty;
+        using (StreamReader sr = new StreamReader(filePath, System.Text.Encoding.Default))
+        {
+          Log.Console.Info("Чтение файла");
+          jsonText = sr.ReadToEnd();
+        }
+        var jsonBody = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(jsonText);
+
         Log.Console.Info("Загрузка сериализатора");
-        var serializer = SerializersRepository.Instance.GetSerializerForEntityType(CommandLine.options.EntityType);
+        var serializer = SerializersRepository.Instance.GetSerializerForEntityType(jsonBody.FirstOrDefault().Keys.FirstOrDefault());
 
         if (serializer != null)
         {
-          string jsonText = string.Empty;
-          using (StreamReader sr = new StreamReader(filePath, System.Text.Encoding.Default))
-          {
-            Log.Console.Info("Чтение файла");
-            jsonText = sr.ReadToEnd();
-          }
-          var jsonBody = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(jsonText);
-
+          jsonBody.RemoveAt(0);
           Log.Console.Info(string.Format("Сериализатор {0} успешно загружен", CommandLine.options.EntityType));
           var index = 1;
           var jsonItemsCount = jsonBody.Count();

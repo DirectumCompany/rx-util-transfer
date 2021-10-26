@@ -24,6 +24,8 @@ namespace TranferSerializers
       public object StageObject;
       public object ApprovalRole;
       public object Assignee;
+      public object ReworkPerformer;
+      public object ReworkApprovalRole;
       public System.Type FunctionsType;
       public Sungero.Core.Enumeration? StageTypeRule;
       public IEnumerable<object> ApprovalRoles;
@@ -96,6 +98,7 @@ namespace TranferSerializers
       rule.IsSmallApprovalAllowed = entityItem.Property("IsSmallApprovalAllowed").ToObject<bool>();
       rule.Priority = entityItem.Property("Priority").ToObject<int>();
       rule.NeedRestrictInitiatorRights = entityItem.Property("NeedRestrictInitiatorRights").ToObject<bool>();
+      rule.ReworkDeadline = entityItem.Property("ReworkDeadline").ToObject<int?>();
       var reworkPerformerType = entityItem.Property("ReworkPerformerType").Value.ToString();
       if (!string.IsNullOrEmpty(reworkPerformerType))
         rule.ReworkPerformerType = Sungero.Core.Enumeration.GetItems(typeof(Sungero.Docflow.ApprovalRule.ReworkPerformerType)).FirstOrDefault(e => e.Value == reworkPerformerType);
@@ -346,16 +349,14 @@ namespace TranferSerializers
           stageEntity = Sungero.Docflow.ApprovalStages.As(Session.Current.CreateEntity(typeof(Sungero.Docflow.IApprovalStage)));
           stageEntity.Name = stageName;
           stageEntity.StageType = stageType;
+          stageEntity.AllowSendToRework = stageObject.Property("AllowSendToRework").ToObject<bool?>();
 
           var deadlineInDays = stageObject.Property("DeadlineInDays").ToObject<int?>();
           if (deadlineInDays != null)
             stageEntity.DeadlineInDays = deadlineInDays;
-          else
-          {
-            var deadlineInHours = stageObject.Property("DeadlineInHours").ToObject<int?>();
-            if (deadlineInHours != null)
-              stageEntity.DeadlineInHours = deadlineInHours;
-          }
+          var deadlineInHours = stageObject.Property("DeadlineInHours").ToObject<int?>();
+          if (deadlineInHours != null)
+            stageEntity.DeadlineInHours = deadlineInHours;
 
           var sequence = stageObject.Property("Sequence").Value.ToString();
           if (!string.IsNullOrEmpty(sequence))
@@ -364,16 +365,44 @@ namespace TranferSerializers
           var reworkType = stageObject.Property("ReworkType").Value.ToString();
           if (!string.IsNullOrEmpty(reworkType))
             stageEntity.ReworkType = Sungero.Core.Enumeration.GetItems(typeof(Sungero.Docflow.ApprovalStage.ReworkType)).FirstOrDefault(e => e.Value == reworkType);
+          
+          var reworkPerformerTypeStage = stageObject.Property("ReworkPerformerType").Value.ToString();
+          if (!string.IsNullOrEmpty(reworkPerformerTypeStage))
+            stageEntity.ReworkPerformerType = Sungero.Core.Enumeration.GetItems(typeof(Sungero.Docflow.ApprovalStage.ReworkPerformerType)).FirstOrDefault(e => e.Value == reworkPerformerTypeStage);
+          
+          var reworkPerformerItemStage = content["ReworkPerformer"] as JObject;
+          if (reworkPerformerItemStage != null)
+          {
+            var reworkPerformerItemName = reworkPerformerItemStage.Property("Name").Value.ToString();
+            var reworkPerformer = Session.Current.GetEntities("Sungero.CoreEntities.IRecipient").Cast<Sungero.CoreEntities.IRecipient>()
+              .FirstOrDefault(e => e.Name == reworkPerformerItemName && e.Status == Sungero.CoreEntities.Recipient.Status.Active);
+            if (reworkPerformer != null)
+              stageEntity.ReworkPerformer = reworkPerformer;
+            else
+              throw new System.IO.InvalidDataException(string.Format("Роль/сотрудник {0} не найден", reworkPerformerItemName));
+          }
 
+          var reworkApprovalRoleItemStage = content["ReworkApprovalRole"] as JObject;
+          if (reworkApprovalRoleItem != null)
+          {
+            var reworkApprovalRoleItemName = reworkApprovalRoleItemStage.Property("Name").Value.ToString();
+            var reworkApprovalRole = Session.Current.GetEntities("Sungero.Docflow.IApprovalRoleBase").Cast<Sungero.Docflow.IApprovalRoleBase>()
+              .FirstOrDefault(e => e.Name == reworkApprovalRoleItemName && e.Status == Sungero.CoreEntities.Recipient.Status.Active);
+            if (reworkApprovalRole != null)
+              rule.ReworkApprovalRole = reworkApprovalRole;
+            else
+              throw new System.IO.InvalidDataException(string.Format("Роль согласования {0} не найдена", reworkApprovalRoleItemName));
+          }
+
+          stageEntity.AllowChangeReworkPerformer = stageObject.Property("AllowChangeReworkPerformer").ToObject<bool?>();
           stageEntity.NeedStrongSign = stageObject.Property("NeedStrongSign").ToObject<bool?>();
           stageEntity.StartDelayDays = stageObject.Property("StartDelayDays").ToObject<int?>();
           stageEntity.Subject = stageObject.Property("Subject").ToObject<string>();
-          stageEntity.AllowSendToRework = stageObject.Property("AllowSendToRework").ToObject<bool?>();
           stageEntity.IsConfirmSigning = stageObject.Property("IsConfirmSigning").ToObject<bool?>();
           stageEntity.IsResultSubmission = stageObject.Property("IsResultSubmission").ToObject<bool?>();
           stageEntity.Note = stageObject.Property("Note").ToObject<string>();
           stageEntity.NeedRestrictPerformerRights = stageObject.Property("NeedRestrictPerformerRights").ToObject<bool>();
-          var rightType = stageObject.Property("ReworkType").Value.ToString();
+          var rightType = stageObject.Property("RightType").Value.ToString();
           if (!string.IsNullOrEmpty(rightType))
             stageEntity.RightType = Sungero.Core.Enumeration.GetItems(typeof(Sungero.Docflow.ApprovalStage.RightType)).FirstOrDefault(e => e.Value == rightType);
 
@@ -501,7 +530,9 @@ namespace TranferSerializers
             ApprovalRole = stage.Stage.ApprovalRole,
             ApprovalRoles = stage.Stage.ApprovalRoles.Select(r => r.ApprovalRole),
             Recipients = stage.Stage.Recipients.Select(r => r.Recipient),
-            StageTypeRule = stage.StageType
+            StageTypeRule = stage.StageType,
+            ReworkApprovalRole = stage.Stage.ReworkApprovalRole,
+            ReworkPerformer = stage.Stage.ReworkPerformer
           });
         else
         {
