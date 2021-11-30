@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
@@ -64,28 +65,41 @@ namespace DrxTransfer.Engine
 
       var entitiesCount = entities.Count();
       Log.Console.Info(string.Format("Найдено {0} объектов", entitiesCount));
-            
-      var result = new List<Dictionary<string, object>>();
+
+      List<string> result = new List<string>();
+      Dictionary<string, object> entityTypeName = new Dictionary<string, object>();
+      entityTypeName.Add(CommandLine.options.EntityType, type);
+      result.Add(JsonConvert.SerializeObject(entityTypeName, Formatting.Indented, new JsonSerializerSettings
+      {
+        ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+        ContractResolver = new SungeroEntitiesContractResolver()
+      }));
 
       var index = 1;
       foreach (var entity in entities)
       {
-        Log.Console.Info(string.Format("Обработка записи {0} из {1}. ИД = {2}", index, entitiesCount, entity.Id));
-        result.Add(new Dictionary<string, object>() { this.Export(entity) });
-        index++;
+        try
+        {
+          Log.Console.Info(string.Format("Обработка записи {0} из {1}. ИД = {2}", index, entitiesCount, entity.Id));
+          index++;
+          result.Add(JsonConvert.SerializeObject(this.Export(entity), Formatting.Indented, new JsonSerializerSettings
+          {
+            ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+            ContractResolver = new SungeroEntitiesContractResolver()
+          }));
+        }
+        catch (Exception ex)
+        {
+          Log.Console.Error(string.Format("Ошибка при попытке обработки и сериализации записи с ИД = {0}", entity.Id));
+          Client.Log.Fatal(ex.Message);
+        }
       }
-
-      Log.Console.Info("Сериализация объектов в json");
-      string JSONBody = JsonConvert.SerializeObject(result, Formatting.Indented, new JsonSerializerSettings
-      {
-        ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
-        ContractResolver = new SungeroEntitiesContractResolver()
-      });
-
+      Log.Console.Info(string.Format("Обработано {0} записей из {1}.", result.Count - 1, entitiesCount));
       using (StreamWriter sw = new StreamWriter(filePath, false, System.Text.Encoding.Default))
       {
         Log.Console.Info("Запись результата в файл");
-        sw.WriteLine(JSONBody);
+        var body = string.Format("[{0}]", string.Join(",", result));
+        sw.WriteLine(body);
       }
     }
   }

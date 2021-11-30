@@ -24,6 +24,10 @@ namespace TranferSerializers
       public object StageObject;
       public object ApprovalRole;
       public object Assignee;
+      public object ReworkPerformer;
+      public object ReworkApprovalRole;
+      public System.Type FunctionsType;
+      public Sungero.Core.Enumeration? StageTypeRule;
       public IEnumerable<object> ApprovalRoles;
       public IEnumerable<object> Recipients;
     }
@@ -58,7 +62,6 @@ namespace TranferSerializers
       var departments = SungeroRepository.GetEntities<Sungero.Company.IDepartment>(content, "Departments", false, true);
       Log.Console.Info("Поиск категорий договоров");
       var documentGroups = SungeroRepository.GetEntities<Sungero.Docflow.IDocumentGroupBase>(content, "DocumentGroup", false, true);
-
       #region Поиск существующих правил.
 
       var allRules = Session.Current.GetEntities(this.EntityTypeName).Cast<Sungero.Docflow.IApprovalRuleBase>()
@@ -94,10 +97,37 @@ namespace TranferSerializers
 
       rule.IsSmallApprovalAllowed = entityItem.Property("IsSmallApprovalAllowed").ToObject<bool>();
       rule.Priority = entityItem.Property("Priority").ToObject<int>();
-
+      rule.NeedRestrictInitiatorRights = entityItem.Property("NeedRestrictInitiatorRights").ToObject<bool>();
+      rule.ReworkDeadline = entityItem.Property("ReworkDeadline").ToObject<int?>();
+      var reworkPerformerType = entityItem.Property("ReworkPerformerType").Value.ToString();
+      if (!string.IsNullOrEmpty(reworkPerformerType))
+        rule.ReworkPerformerType = Sungero.Core.Enumeration.GetItems(typeof(Sungero.Docflow.ApprovalRule.ReworkPerformerType)).FirstOrDefault(e => e.Value == reworkPerformerType);
       #endregion
 
-      #region Заполнение параметров.     
+      #region Заполнение параметров. 
+      var reworkPerformerItem = content["ReworkPerformer"] as JObject;
+      if (reworkPerformerItem != null)
+      {
+        var reworkPerformerItemName = reworkPerformerItem.Property("Name").Value.ToString();
+        var reworkPerformer = Session.Current.GetEntities("Sungero.CoreEntities.IRecipient").Cast<Sungero.CoreEntities.IRecipient>()
+          .FirstOrDefault(e => e.Name == reworkPerformerItemName && e.Status == Sungero.CoreEntities.Recipient.Status.Active);
+        if (reworkPerformer != null)
+          rule.ReworkPerformer = reworkPerformer;
+        else
+          throw new System.IO.InvalidDataException(string.Format("Роль/сотрудник {0} не найден", reworkPerformerItemName));
+      }
+
+      var reworkApprovalRoleItem = content["ReworkApprovalRole"] as JObject;
+      if (reworkApprovalRoleItem != null)
+      {
+        var reworkApprovalRoleItemName = reworkApprovalRoleItem.Property("Name").Value.ToString();
+        var reworkApprovalRole = Session.Current.GetEntities("Sungero.Docflow.IApprovalRoleBase").Cast<Sungero.Docflow.IApprovalRoleBase>()
+          .FirstOrDefault(e => e.Name == reworkApprovalRoleItemName && e.Status == Sungero.CoreEntities.Recipient.Status.Active);
+        if (reworkApprovalRole != null)
+          rule.ReworkApprovalRole = reworkApprovalRole;
+        else
+          throw new System.IO.InvalidDataException(string.Format("Роль согласования {0} не найдена", reworkApprovalRoleItemName));
+      }
 
       foreach (var documentKind in documentKinds)
       {
@@ -264,16 +294,51 @@ namespace TranferSerializers
       #endregion
 
       #region Создание этапов.
-
+      var functionsArray = content["Stages"] as JArray;
+      var functions = functionsArray.ToObject<List<Stage>>().Where(s => s.FunctionsType != null).ToList();
+      var currentStagesFunctions = new List<Sungero.Docflow.IApprovalStageBase>();
+      foreach (var function in functions)
+      {
+        var functionObject = function.StageObject as JObject;
+        var functionName = functionObject.Property("Name").Value.ToString();
+        var functionType = function.StageTypeRule;
+        var functionEntity = Sungero.Docflow.ApprovalStageBases.Null;
+        functionEntity = Session.Current.GetEntities("Sungero.Docflow.IApprovalStageBase").Cast<Sungero.Docflow.IApprovalStageBase>().FirstOrDefault(c => c.Name == functionName) ??
+                    currentStagesFunctions.FirstOrDefault(s => s.Name == functionName);
+        if(functionEntity == null && function.FunctionsType.FullName == "Sungero.Docflow.IApprovalConvertPdfStage")
+        {
+          var newFunctionEntity = Sungero.Docflow.ApprovalConvertPdfStages.As(Session.Current.CreateEntity(function.FunctionsType.ToString()));
+          newFunctionEntity.ConvertWithAddenda = functionObject.Property("ConvertWithAddenda").ToObject<bool?>();
+          functionEntity = Sungero.Docflow.ApprovalStageBases.As(newFunctionEntity);
+          functionEntity = FillFunction(functionEntity, functionObject);
+        }
+        if (functionEntity == null && function.FunctionsType.FullName == "Sungero.Docflow.IApprovalReviewTaskStage")
+        {
+          var newFunctionEntity = Sungero.Docflow.ApprovalReviewTaskStages.As(Session.Current.CreateEntity(function.FunctionsType.ToString()));
+          newFunctionEntity.WaitReviewTaskCompletion = functionObject.Property("WaitReviewTaskCompletion").ToObject<bool?>();
+          functionEntity = Sungero.Docflow.ApprovalStageBases.As(newFunctionEntity);
+          functionEntity = FillFunction(functionEntity, functionObject);
+        }
+        if (functionEntity == null && function.FunctionsType.FullName == "Sungero.Contracts.IApprovalIncInvoicePaidStage")
+        {
+          var newFunctionEntity = Sungero.Contracts.ApprovalIncInvoicePaidStages.As(Session.Current.CreateEntity(function.FunctionsType.ToString()));
+          functionEntity = Sungero.Docflow.ApprovalStageBases.As(newFunctionEntity);
+          functionEntity = FillFunction(functionEntity, functionObject);
+        }
+        currentStagesFunctions.Add(functionEntity);
+        var functionItem = rule.Stages.AddNew();
+        functionItem.StageBase = functionEntity;
+        functionItem.Number = function.Number;
+        functionItem.StageType = functionType;
+      }
       var stagesArray = content["Stages"] as JArray;
-      var stages = stagesArray.ToObject<List<Stage>>();
+      var stages = stagesArray.ToObject<List<Stage>>().Where(s => s.FunctionsType == null).ToList();
       var currentStages = new List<Sungero.Docflow.IApprovalStage>();
-
       foreach (var stage in stages)
       {
         var stageObject = stage.StageObject as JObject;
         var stageName = stageObject.Property("Name").Value.ToString();
-        var stageType = Sungero.Core.Enumeration.GetItems(typeof(Sungero.Docflow.ApprovalStage.StageType)).FirstOrDefault(e => e.Value == stageObject.Property("StageType").Value.ToString());
+        var stageType = stage.StageTypeRule;
 
         var stageEntity = Sungero.Docflow.ApprovalStages.Null;
         stageEntity = Session.Current.GetEntities("Sungero.Docflow.IApprovalStage").Cast<Sungero.Docflow.IApprovalStage>().FirstOrDefault(c => c.Name == stageName) ??
@@ -284,16 +349,14 @@ namespace TranferSerializers
           stageEntity = Sungero.Docflow.ApprovalStages.As(Session.Current.CreateEntity(typeof(Sungero.Docflow.IApprovalStage)));
           stageEntity.Name = stageName;
           stageEntity.StageType = stageType;
+          stageEntity.AllowSendToRework = stageObject.Property("AllowSendToRework").ToObject<bool?>();
 
           var deadlineInDays = stageObject.Property("DeadlineInDays").ToObject<int?>();
           if (deadlineInDays != null)
             stageEntity.DeadlineInDays = deadlineInDays;
-          else
-          {
-            var deadlineInHours = stageObject.Property("DeadlineInHours").ToObject<int?>();
-            if (deadlineInHours != null)
-              stageEntity.DeadlineInHours = deadlineInHours;
-          }
+          var deadlineInHours = stageObject.Property("DeadlineInHours").ToObject<int?>();
+          if (deadlineInHours != null)
+            stageEntity.DeadlineInHours = deadlineInHours;
 
           var sequence = stageObject.Property("Sequence").Value.ToString();
           if (!string.IsNullOrEmpty(sequence))
@@ -302,14 +365,46 @@ namespace TranferSerializers
           var reworkType = stageObject.Property("ReworkType").Value.ToString();
           if (!string.IsNullOrEmpty(reworkType))
             stageEntity.ReworkType = Sungero.Core.Enumeration.GetItems(typeof(Sungero.Docflow.ApprovalStage.ReworkType)).FirstOrDefault(e => e.Value == reworkType);
+          
+          var reworkPerformerTypeStage = stageObject.Property("ReworkPerformerType").Value.ToString();
+          if (!string.IsNullOrEmpty(reworkPerformerTypeStage))
+            stageEntity.ReworkPerformerType = Sungero.Core.Enumeration.GetItems(typeof(Sungero.Docflow.ApprovalStage.ReworkPerformerType)).FirstOrDefault(e => e.Value == reworkPerformerTypeStage);
+          
+          var reworkPerformerItemStage = content["ReworkPerformer"] as JObject;
+          if (reworkPerformerItemStage != null)
+          {
+            var reworkPerformerItemName = reworkPerformerItemStage.Property("Name").Value.ToString();
+            var reworkPerformer = Session.Current.GetEntities("Sungero.CoreEntities.IRecipient").Cast<Sungero.CoreEntities.IRecipient>()
+              .FirstOrDefault(e => e.Name == reworkPerformerItemName && e.Status == Sungero.CoreEntities.Recipient.Status.Active);
+            if (reworkPerformer != null)
+              stageEntity.ReworkPerformer = reworkPerformer;
+            else
+              throw new System.IO.InvalidDataException(string.Format("Роль/сотрудник {0} не найден", reworkPerformerItemName));
+          }
 
+          var reworkApprovalRoleItemStage = content["ReworkApprovalRole"] as JObject;
+          if (reworkApprovalRoleItem != null)
+          {
+            var reworkApprovalRoleItemName = reworkApprovalRoleItemStage.Property("Name").Value.ToString();
+            var reworkApprovalRole = Session.Current.GetEntities("Sungero.Docflow.IApprovalRoleBase").Cast<Sungero.Docflow.IApprovalRoleBase>()
+              .FirstOrDefault(e => e.Name == reworkApprovalRoleItemName && e.Status == Sungero.CoreEntities.Recipient.Status.Active);
+            if (reworkApprovalRole != null)
+              rule.ReworkApprovalRole = reworkApprovalRole;
+            else
+              throw new System.IO.InvalidDataException(string.Format("Роль согласования {0} не найдена", reworkApprovalRoleItemName));
+          }
+
+          stageEntity.AllowChangeReworkPerformer = stageObject.Property("AllowChangeReworkPerformer").ToObject<bool?>();
           stageEntity.NeedStrongSign = stageObject.Property("NeedStrongSign").ToObject<bool?>();
           stageEntity.StartDelayDays = stageObject.Property("StartDelayDays").ToObject<int?>();
           stageEntity.Subject = stageObject.Property("Subject").ToObject<string>();
-          stageEntity.AllowSendToRework = stageObject.Property("AllowSendToRework").ToObject<bool?>();
           stageEntity.IsConfirmSigning = stageObject.Property("IsConfirmSigning").ToObject<bool?>();
           stageEntity.IsResultSubmission = stageObject.Property("IsResultSubmission").ToObject<bool?>();
           stageEntity.Note = stageObject.Property("Note").ToObject<string>();
+          stageEntity.NeedRestrictPerformerRights = stageObject.Property("NeedRestrictPerformerRights").ToObject<bool>();
+          var rightType = stageObject.Property("RightType").Value.ToString();
+          if (!string.IsNullOrEmpty(rightType))
+            stageEntity.RightType = Sungero.Core.Enumeration.GetItems(typeof(Sungero.Docflow.ApprovalStage.RightType)).FirstOrDefault(e => e.Value == rightType);
 
           var assigneeType = stageObject.Property("AssigneeType").Value.ToString();
           if (!string.IsNullOrEmpty(assigneeType))
@@ -416,7 +511,8 @@ namespace TranferSerializers
         content["Card"] = Sungero.Contracts.ContractsApprovalRules.As(entity);
 
       var approvalRule = Sungero.Docflow.ApprovalRuleBases.As(entity);
-
+      content["ReworkPerformer"] = approvalRule.ReworkPerformer;
+      content["ReworkApprovalRole"] = approvalRule.ReworkApprovalRole;
       content["DocumentKinds"] = approvalRule.DocumentKinds.Select(k => k.DocumentKind);
       content["Departments"] = approvalRule.Departments.Select(d => d.Department);
       content["BusinessUnit"] = approvalRule.BusinessUnits.Select(u => u.BusinessUnit);
@@ -424,15 +520,31 @@ namespace TranferSerializers
 
       var stages = new List<Stage>();
       foreach (var stage in approvalRule.Stages)
-        stages.Add(new Stage()
+      {
+        if (stage.StageType.Value.Value != "Function")
+          stages.Add(new Stage()
+          {
+            Number = stage.Number.GetValueOrDefault(),
+            StageObject = stage.Stage,
+            Assignee = stage.Stage.Assignee,
+            ApprovalRole = stage.Stage.ApprovalRole,
+            ApprovalRoles = stage.Stage.ApprovalRoles.Select(r => r.ApprovalRole),
+            Recipients = stage.Stage.Recipients.Select(r => r.Recipient),
+            StageTypeRule = stage.StageType,
+            ReworkApprovalRole = stage.Stage.ReworkApprovalRole,
+            ReworkPerformer = stage.Stage.ReworkPerformer
+          });
+        else
         {
-          Number = stage.Number.GetValueOrDefault(),
-          StageObject = stage.Stage,
-          Assignee = stage.Stage.Assignee,
-          ApprovalRole = stage.Stage.ApprovalRole,
-          ApprovalRoles = stage.Stage.ApprovalRoles.Select(r => r.ApprovalRole),
-          Recipients = stage.Stage.Recipients.Select(r => r.Recipient)
-        });
+          stages.Add(new Stage()
+          {
+            Number = stage.Number.GetValueOrDefault(),
+            StageObject = stage.StageBase,
+            StageTypeRule = stage.StageType,
+            FunctionsType = stage.StageBase.GetEntityInterfaceType()
+          });
+        }
+      }
       content["Stages"] = stages;
 
       var conditions = new List<Condition>();
@@ -462,6 +574,25 @@ namespace TranferSerializers
       content["Transitions"] = transitions;
 
       return content;
+    }
+    private Sungero.Docflow.IApprovalStageBase FillFunction (Sungero.Docflow.IApprovalStageBase function, JObject functionObject)
+    {
+      var stageFunction = Sungero.Docflow.ApprovalFunctionStageBases.As(function);
+      stageFunction.Name = functionObject.Property("Name").ToObject<string>();
+      stageFunction.Note = functionObject.Property("Note").ToObject<string>();
+      var deadlineInDays = functionObject.Property("DeadlineInDays").ToObject<int?>();
+      if (deadlineInDays != null)
+        stageFunction.DeadlineInDays = deadlineInDays;
+      var deadlineInHours = functionObject.Property("DeadlineInHours").ToObject<int?>();
+      if (deadlineInHours != null)
+        stageFunction.DeadlineInHours = deadlineInHours;
+      stageFunction.TimeoutInDays = functionObject.Property("TimeoutInDays").ToObject<int?>();
+      stageFunction.TimeoutInHours = functionObject.Property("TimeoutInHours").ToObject<int?>();
+      var timeoutAction = functionObject.Property("TimeoutAction").Value.ToString();
+      if (!string.IsNullOrEmpty(timeoutAction))
+        stageFunction.TimeoutAction = Sungero.Core.Enumeration.GetItems(typeof(Sungero.Docflow.ApprovalFunctionStageBase.TimeoutAction)).FirstOrDefault(e => e.Value == timeoutAction);
+      function = Sungero.Docflow.ApprovalStageBases.As(stageFunction);
+      return function;
     }
   }
 }

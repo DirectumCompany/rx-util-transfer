@@ -4,6 +4,7 @@ using CommonLibrary.Dependencies;
 using CommonLibrary.Exceptions;
 using DrxTransfer;
 using Sungero.Core;
+using Sungero.Deploy.Services;
 using Sungero.Domain.Client;
 using Sungero.Domain.Client.Deployment;
 using Sungero.Domain.ClientBase;
@@ -30,7 +31,7 @@ namespace DrxTransfer
       LocalizationManager.Instance.AssignCurrentCulture();
 
       // Управление кэшами.
-      var cacheConfigProvider = new CacheConfigProvider(null);
+      var cacheConfigProvider = new CacheConfigProvider(null, false);
       Dependency.RegisterInstance<ICacheManager>(new CacheManagerImplementation(cacheConfigProvider));
 
       // Плагины.
@@ -65,7 +66,7 @@ namespace DrxTransfer
       DrxTransfer.Log.Console.Info("Загрузка модулей");
       ClientDevelopmentUpdater.Instance.RefreshDevelopment();
       MetadataService.ConfigurationSettingsPaths = new Sungero.Domain.ClientConfigurationSettingsPaths();
-      ClientLazyAssembliesResolver.Instance.LinkToAssembliesFolder(ClientDevelopmentUpdater.Instance.CacheFolder);
+      AssemblyResolver.Instance.AddStore<ClientLazyAssembliesStore>(ClientDevelopmentUpdater.Instance.CacheFolder);
 
       var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
       var developmentDirectory = ClientDevelopmentUpdater.Instance.CacheFolder;

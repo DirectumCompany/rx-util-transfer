@@ -36,8 +36,6 @@ namespace DrxTransfer
           .WithTenant()
           .Configure(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LogSettingsFileName));
 
-        AppConfig.Change();
-
         Client.Initialize();
 
         CommandLine.RunParsedArgs();
@@ -69,7 +67,6 @@ namespace DrxTransfer
       commandLineParser.ExtractArgumentAttributes(options);
       if (!args.Any() || args.Any(c => showUsageCommands.Contains(c)))
       {
-        AppConfig.Change();
         LocalizationManager.Instance.AssignCurrentCulture();
         commandLineParser.FillDescFromResource(new CmdResources());
       }
